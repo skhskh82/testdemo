@@ -9,6 +9,4 @@
 > [!IMPORTANT] 
 > This is a university project, which was done using kaggle free resources, so keep your expectations accordingly!
 
-* Comparison of our model and various famous VC models:
-
-<img src="comparison.png" alt="drawing" width="600"/>
+<img src="logo.png" alt="drawing" width="600"/>
