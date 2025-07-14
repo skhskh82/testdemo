@@ -4,391 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voice Conversion Demo</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            color: white;
-        }
-        
-        .container {
-            max-width: 1200px;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            background: linear-gradient(90deg, #ff7e5f, #feb47b);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        
-        .samples-container {
-            margin-top: 30px;
-        }
-        
-        .sample-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-        }
-        
-        .sample-table th {
-            padding: 15px;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        .sample-table td {
-            padding: 15px;
-            text-align: center;
-            vertical-align: top;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .sample-type {
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        
-        .source .sample-type { color: #4285F4; } /* Blue */
-        .reference .sample-type { color: #EA4335; } /* Red */
-        .generated .sample-type { color: #34A853; } /* Green */
-        
-        .player-wrapper {
-            position: relative;
-            width: 120px;
-            height: 120px;
-            margin: 0 auto;
-        }
-        
-        .player-wrapper svg {
-            width: 120px;
-            height: 120px;
-        }
-        
-        .bg-circle {
-            stroke: rgba(255, 255, 255, 0.1);
-            stroke-width: 6;
-            fill: none;
-        }
-        
-        .source .progress-path { stroke: #4285F4; } /* Blue */
-        .reference .progress-path { stroke: #EA4335; } /* Red */
-        .generated .progress-path { stroke: #34A853; } /* Green */
-        
-        .progress-path {
-            stroke-width: 6;
-            fill: none;
-            stroke-dasharray: 340; /* 2 * π * 54 */
-            stroke-dashoffset: 340;
-            transition: stroke-dashoffset 0.1s linear;
-            transform: rotate(-90deg);
-        }
-        
-        .play-btn {
-            position: absolute;
-            top: 30px;
-            left: 30px;
-            width: 60px;
-            height: 60px;
-            background: currentColor;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-        }
-        
-        .play-btn:hover {
-            transform: scale(1.05);
-        }
-        
-        .play-btn:active {
-            transform: scale(0.95);
-        }
-        
-        .file-name {
-            margin-top: 10px;
-            font-size: 14px;
-            text-align: center;
-            max-width: 120px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            padding: 5px 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .upload-section {
-            margin-top: 30px;
-            padding: 20px;
-            background: rgba(40, 40, 50, 0.7);
-            border-radius: 15px;
-        }
-        
-        .upload-btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background: #4285F4;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        
-        .upload-btn:hover {
-            background: #5a95f5;
-        }
-        
-        #file-upload {
-            display: none;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Voice Conversion Demo</h1>
-            <p>Compare source, reference and generated samples</p>
-        </header>
+        <!-- Header content -->
         
-        <div class="samples-container">
-            <table class="sample-table">
-                <thead>
-                    <tr>
-                        <th>Source (Blue)</th>
-                        <th>Reference (Red)</th>
-                        <th>Generated (Green)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Sample Set 1 -->
-                    <tr>
-                        <td class="source">
-                            <div class="sample-type">Source 1</div>
-                            <div class="player-wrapper">
-                                <svg viewBox="0 0 120 120">
-                                    <circle cx="60" cy="60" r="54" class="bg-circle"/>
-                                    <circle class="progress-path" cx="60" cy="60" r="54"/>
-                                </svg>
-                                <div class="play-btn" onclick="togglePlay('audio-source1')">
-                                    <div class="play-icon" id="icon-source1"></div>
-                                </div>
-                            </div>
-                            <div class="file-name">source_1.wav</div>
-                            <audio id="audio-source1" preload="auto" ontimeupdate="updateProgress('audio-source1', 'progress-source1')" onended="resetPlayer('audio-source1', 'icon-source1', 'progress-source1')">
-                                <source src="samples/source_1.wav" type="audio/wav">
-                            </audio>
-                        </td>
-                        <td class="reference">
-                            <div class="sample-type">Reference 1</div>
-                            <div class="player-wrapper">
-                                <svg viewBox="0 0 120 120">
-                                    <circle cx="60" cy="60" r="54" class="bg-circle"/>
-                                    <circle class="progress-path" cx="60" cy="60" r="54"/>
-                                </svg>
-                                <div class="play-btn" onclick="togglePlay('audio-ref1')">
-                                    <div class="play-icon" id="icon-ref1"></div>
-                                </div>
-                            </div>
-                            <div class="file-name">reference_1.wav</div>
-                            <audio id="audio-ref1" preload="auto" ontimeupdate="updateProgress('audio-ref1', 'progress-ref1')" onended="resetPlayer('audio-ref1', 'icon-ref1', 'progress-ref1')">
-                                <source src="samples/reference_1.wav" type="audio/wav">
-                            </audio>
-                        </td>
-                        <td class="generated">
-                            <div class="sample-type">Generated 1</div>
-                            <div class="player-wrapper">
-                                <svg viewBox="0 0 120 120">
-                                    <circle cx="60" cy="60" r="54" class="bg-circle"/>
-                                    <circle class="progress-path" cx="60" cy="60" r="54"/>
-                                </svg>
-                                <div class="play-btn" onclick="togglePlay('audio-gen1')">
-                                    <div class="play-icon" id="icon-gen1"></div>
-                                </div>
-                            </div>
-                            <div class="file-name">generated_1.wav</div>
-                            <audio id="audio-gen1" preload="auto" ontimeupdate="updateProgress('audio-gen1', 'progress-gen1')" onended="resetPlayer('audio-gen1', 'icon-gen1', 'progress-gen1')">
-                                <source src="samples/generated_1.wav" type="audio/wav">
-                            </audio>
-                        </td>
-                    </tr>
-                    
-                    <!-- Sample Set 2 -->
-                    <tr>
-                        <td class="source">
-                            <div class="sample-type">Source 2</div>
-                            <div class="player-wrapper">
-                                <svg viewBox="0 0 120 120">
-                                    <circle cx="60" cy="60" r="54" class="bg-circle"/>
-                                    <circle class="progress-path" cx="60" cy="60" r="54"/>
-                                </svg>
-                                <div class="play-btn" onclick="togglePlay('audio-source2')">
-                                    <div class="play-icon" id="icon-source2"></div>
-                                </div>
-                            </div>
-                            <div class="file-name">source_2.wav</div>
-                            <audio id="audio-source2" preload="auto" ontimeupdate="updateProgress('audio-source2', 'progress-source2')" onended="resetPlayer('audio-source2', 'icon-source2', 'progress-source2')">
-                                <source src="samples/source_2.wav" type="audio/wav">
-                            </audio>
-                        </td>
-                        <td class="reference">
-                            <div class="sample-type">Reference 2</div>
-                            <div class="player-wrapper">
-                                <svg viewBox="0 0 120 120">
-                                    <circle cx="60" cy="60" r="54" class="bg-circle"/>
-                                    <circle class="progress-path" cx="60" cy="60" r="54"/>
-                                </svg>
-                                <div class="play-btn" onclick="togglePlay('audio-ref2')">
-                                    <div class="play-icon" id="icon-ref2"></div>
-                                </div>
-                            </div>
-                            <div class="file-name">reference_2.wav</div>
-                            <audio id="audio-ref2" preload="auto" ontimeupdate="updateProgress('audio-ref2', 'progress-ref2')" onended="resetPlayer('audio-ref2', 'icon-ref2', 'progress-ref2')">
-                                <source src="samples/reference_2.wav" type="audio/wav">
-                            </audio>
-                        </td>
-                        <td class="generated">
-                            <div class="sample-type">Generated 2</div>
-                            <div class="player-wrapper">
-                                <svg viewBox="0 0 120 120">
-                                    <circle cx="60" cy="60" r="54" class="bg-circle"/>
-                                    <circle class="progress-path" cx="60" cy="60" r="54"/>
-                                </svg>
-                                <div class="play-btn" onclick="togglePlay('audio-gen2')">
-                                    <div class="play-icon" id="icon-gen2"></div>
-                                </div>
-                            </div>
-                            <div class="file-name">generated_2.wav</div>
-                            <audio id="audio-gen2" preload="auto" ontimeupdate="updateProgress('audio-gen2', 'progress-gen2')" onended="resetPlayer('audio-gen2', 'icon-gen2', 'progress-gen2')">
-                                <source src="samples/generated_2.wav" type="audio/wav">
-                            </audio>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="sample-row">
+            <div id="source-1" class="player-container"></div>
+            <div id="reference-1" class="player-container"></div>
+            <div id="generated-1" class="player-container"></div>
         </div>
         
-        <div class="upload-section">
-            <h2>Upload Your Own Samples</h2>
-            <input type="file" id="file-upload" accept="audio/*" multiple>
-            <label for="file-upload" class="upload-btn">Choose Audio Files</label>
-            <p id="upload-status">No files selected</p>
-        </div>
-    </div>
-
-    <script>
-        // Initialize all players
-        document.addEventListener('DOMContentLoaded', function() {
-            // Set initial play icons
-            document.querySelectorAll('.play-icon').forEach(icon => {
-                icon.innerHTML = `
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                        <path d="M8 5v14l11-7z"/>
-                    </svg>
-                `;
-            });
-            
-            // Handle file uploads
-            document.getElementById('file-upload').addEventListener('change', function(e) {
-                const files = e.target.files;
-                document.getElementById('upload-status').textContent = 
-                    files.length > 0 ? `${files.length} file(s) selected` : 'No files selected';
-                
-                // Here you would handle the upload process
-                // For a real implementation, you would need server-side code
-                console.log("Files selected:", files);
-            });
-        });
+        <!-- More sample rows as needed -->
         
-        // Player control functions
-        function togglePlay(audioId) {
-            const audio = document.getElementById(audioId);
-            const iconId = 'icon-' + audioId.split('-')[1];
-            const icon = document.getElementById(iconId);
-            
-            if (audio.paused) {
-                // Pause all other players
-                document.querySelectorAll('audio').forEach(a => {
-                    if (a.id !== audioId && !a.paused) {
-                        a.pause();
-                        const otherIconId = 'icon-' + a.id.split('-')[1];
-                        showPlayIcon(otherIconId);
-                    }
+        <script src="js/player.js"></script>
+        <script>
+            // Initialize players when DOM loads
+            document.addEventListener('DOMContentLoaded', function() {
+                // Sample 1
+                createCircularPlayer({
+                    containerId: 'source-1',
+                    audioSrc: 'samples/source_1.wav',
+                    fileName: 'source_1.wav',
+                    playerColor: '#4285F4' // Blue
                 });
                 
-                audio.play()
-                    .then(() => showPauseIcon(iconId))
-                    .catch(error => console.error("Playback failed:", error));
-            } else {
-                audio.pause();
-                showPlayIcon(iconId);
-            }
-        }
-        
-        function updateProgress(audioId, progressId) {
-            const audio = document.getElementById(audioId);
-            const progress = document.querySelector(`#${progressId}`);
-            const circumference = 2 * Math.PI * 54;
-            
-            if (audio.duration) {
-                const percent = audio.currentTime / audio.duration;
-                const offset = circumference - (percent * circumference);
-                progress.style.strokeDashoffset = offset;
-            }
-        }
-        
-        function resetPlayer(audioId, iconId, progressId) {
-            const audio = document.getElementById(audioId);
-            const progress = document.querySelector(`#${progressId}`);
-            const circumference = 2 * Math.PI * 54;
-            
-            audio.currentTime = 0;
-            showPlayIcon(iconId);
-            progress.style.strokeDashoffset = circumference;
-        }
-        
-        function showPlayIcon(iconId) {
-            const icon = document.getElementById(iconId);
-            icon.innerHTML = `
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                    <path d="M8 5v14l11-7z"/>
-                </svg>
-            `;
-        }
-        
-        function showPauseIcon(iconId) {
-            const icon = document.getElementById(iconId);
-            icon.innerHTML = `
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-                </svg>
-            `;
-        }
-    </script>
+                createCircularPlayer({
+                    containerId: 'reference-1',
+                    audioSrc: 'samples/reference_1.wav',
+                    fileName: 'reference_1.wav',
+                    playerColor: '#EA4335' // Red
+                });
+                
+                createCircularPlayer({
+                    containerId: 'generated-1',
+                    audioSrc: 'samples/generated_1.wav',
+                    fileName: 'generated_1.wav',
+                    playerColor: '#34A853' // Green
+                });
+                
+                // Add more players as needed
+            });
+        </script>
+    </div>
 </body>
 </html>
