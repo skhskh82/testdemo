@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circular Audio Player</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: white;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #aaa;
+        }
+        
+        .player-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(30, 30, 40, 0.8);
+            border-radius: 15px;
+        }
+        
+        .player-wrapper {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin-bottom: 20px;
+        }
+        
+        .progress-circle {
+            transform: rotate(-90deg);
+        }
+        
+        .bg-circle {
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 8;
+            fill: none;
+        }
+        
+        .progress-path {
+            stroke: #4285F4;
+            stroke-width: 8;
+            fill: none;
+            stroke-dasharray: 565; /* 2 * π * 90 */
+            stroke-dashoffset: 565;
+            transition: stroke 0.3s ease;
+        }
+        
+        .play-btn {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            width: 100px;
+            height: 100px;
+            background: #4285F4;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .play-btn:hover {
+            transform: scale(1.05);
+            background: #5a95f5;
+        }
+        
+        .play-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .file-name {
+            margin-top: 15px;
+            font-size: 16px;
+            text-align: center;
+            max-width: 80%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+        }
+        
+        .instructions {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(40, 40, 50, 0.7);
+            border-radius: 15px;
+        }
+        
+        .instructions h2 {
+            color: #ff7e5f;
+            margin-top: 0;
+        }
+        
+        code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        
+        .explanation {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(40, 40, 50, 0.7);
+            border-radius: 15px;
+        }
+        
+        .explanation h2 {
+            color: #4caf50;
+            margin-top: 0;
+        }
+        
+        .fixed-item {
+            color: #4caf50;
+            font-weight: bold;
+        }
+        
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Circular Audio Player</h1>
+            <p class="subtitle">With Fixed Progress Animation</p>
+        </header>
+        
+        <div class="player-container">
+            <div class="player-wrapper">
+                <svg width="200" height="200" viewBox="0 0 200 200">
+                    <!-- Background circle -->
+                    <circle cx="100" cy="100" r="90" class="bg-circle"/>
+                    <!-- Progress circle -->
+                    <circle id="progress" cx="100" cy="100" r="90" class="progress-path"/>
+                </svg>
+                <div id="play-btn" class="play-btn">
+                    <div id="play-icon"></div>
+                </div>
+            </div>
+            <div class="file-name" id="file-name">yearn_for_time.mp3</div>
+        </div>
+        
+        <div class="instructions">
+            <h2>How to Use</h2>
+            <p>To implement this fixed circular player in your IPython environment:</p>
+            <ol>
+                <li>Replace the hardcoded <code>stroke-dasharray</code> with the calculated circumference</li>
+                <li>Use <code>getTotalLength()</code> for accurate circle measurement</li>
+                <li>Update the progress calculation to use the actual circumference</li>
+                <li>Ensure the SVG circle has the correct radius (90 in this case)</li>
+            </ol>
+        </div>
+        
+        <div class="explanation">
+            <h2>What Was Fixed</h2>
+            <ul>
+                <li><span class="fixed-item">Progress calculation</span> - Now uses actual circle circumference</li>
+                <li><span class="fixed-item">SVG rendering</span> - Correct circle radius and attributes</li>
+                <li><span class="fixed-item">Animation</span> - Smooth progress animation during playback</li>
+                <li><span class="fixed-item">Initial state</span> - Properly reset on audio end</li>
+            </ul>
+        </div>
+        
+        <footer>
+            <p>Circular Audio Player with Fixed Animation | Works in Jupyter/IPython environments</p>
+        </footer>
+    </div>
+    
+    <audio id="audio-player" preload="auto">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const audio = document.getElementById('audio-player');
+            const button = document.getElementById('play-btn');
+            const icon = document.getElementById('play-icon');
+            const progress = document.getElementById('progress');
+            const fileName = document.getElementById('file-name');
+            
+            // Constants
+            const circumference = 2 * Math.PI * 90;
+            let isPlaying = false;
+            let animationFrame;
+            
+            // Set initial stroke properties
+            progress.style.strokeDasharray = circumference;
+            progress.style.strokeDashoffset = circumference;
+            
+            // Show play icon (triangle)
+            function showPlayIcon() {
+                icon.innerHTML = `
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                `;
+            }
+            
+            // Show pause icon (two bars)
+            function showPauseIcon() {
+                icon.innerHTML = `
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                    </svg>
+                `;
+            }
+            
+            // Update progress circle
+            function updateProgress() {
+                if (audio.duration) {
+                    const percent = audio.currentTime / audio.duration;
+                    const offset = circumference - (percent * circumference);
+                    progress.style.strokeDashoffset = offset;
+                }
+                
+                if (isPlaying) {
+                    animationFrame = requestAnimationFrame(updateProgress);
+                }
+            }
+            
+            // Toggle playback
+            button.addEventListener('click', () => {
+                if (isPlaying) {
+                    audio.pause();
+                    cancelAnimationFrame(animationFrame);
+                    showPlayIcon();
+                } else {
+                    audio.play();
+                    showPauseIcon();
+                    updateProgress();
+                }
+                isPlaying = !isPlaying;
+            });
+            
+            // Reset on end
+            audio.addEventListener('ended', () => {
+                isPlaying = false;
+                showPlayIcon();
+                progress.style.strokeDashoffset = circumference;
+                cancelAnimationFrame(animationFrame);
+            });
+            
+            // Initialize with play icon
+            showPlayIcon();
+        });
+    </script>
+</body>
+</html>
