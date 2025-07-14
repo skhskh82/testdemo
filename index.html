@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Circular Audio Player</title>
+    <title>Voice Conversion Demo</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -18,7 +18,7 @@
         }
         
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             width: 100%;
             background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(10px);
@@ -41,66 +41,87 @@
             color: transparent;
         }
         
-        .subtitle {
-            font-size: 1.2rem;
-            color: #aaa;
+        .samples-container {
+            margin-top: 30px;
         }
         
-        .player-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
-            padding: 20px;
-            background: rgba(30, 30, 40, 0.8);
-            border-radius: 15px;
+        .sample-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
         }
+        
+        .sample-table th {
+            padding: 15px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sample-table td {
+            padding: 15px;
+            text-align: center;
+            vertical-align: top;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .sample-type {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .source .sample-type { color: #4285F4; } /* Blue */
+        .reference .sample-type { color: #EA4335; } /* Red */
+        .generated .sample-type { color: #34A853; } /* Green */
         
         .player-wrapper {
             position: relative;
-            width: 200px;
-            height: 200px;
-            margin-bottom: 20px;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
         }
         
-        .progress-circle {
-            transform: rotate(-90deg);
+        .player-wrapper svg {
+            width: 120px;
+            height: 120px;
         }
         
         .bg-circle {
             stroke: rgba(255, 255, 255, 0.1);
-            stroke-width: 8;
+            stroke-width: 6;
             fill: none;
         }
         
+        .source .progress-path { stroke: #4285F4; } /* Blue */
+        .reference .progress-path { stroke: #EA4335; } /* Red */
+        .generated .progress-path { stroke: #34A853; } /* Green */
+        
         .progress-path {
-            stroke: #4285F4;
-            stroke-width: 8;
+            stroke-width: 6;
             fill: none;
-            stroke-dasharray: 565; /* 2 * π * 90 */
-            stroke-dashoffset: 565;
-            transition: stroke 0.3s ease;
+            stroke-dasharray: 340; /* 2 * π * 54 */
+            stroke-dashoffset: 340;
+            transition: stroke-dashoffset 0.1s linear;
+            transform: rotate(-90deg);
         }
         
         .play-btn {
             position: absolute;
-            top: 50px;
-            left: 50px;
-            width: 100px;
-            height: 100px;
-            background: #4285F4;
+            top: 30px;
+            left: 30px;
+            width: 60px;
+            height: 60px;
+            background: currentColor;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
         }
         
         .play-btn:hover {
             transform: scale(1.05);
-            background: #5a95f5;
         }
         
         .play-btn:active {
@@ -108,188 +129,266 @@
         }
         
         .file-name {
-            margin-top: 15px;
-            font-size: 16px;
+            margin-top: 10px;
+            font-size: 14px;
             text-align: center;
-            max-width: 80%;
+            max-width: 120px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            padding: 8px 15px;
+            padding: 5px 10px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
+            border-radius: 15px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
-        .instructions {
+        .upload-section {
             margin-top: 30px;
             padding: 20px;
             background: rgba(40, 40, 50, 0.7);
             border-radius: 15px;
         }
         
-        .instructions h2 {
-            color: #ff7e5f;
-            margin-top: 0;
+        .upload-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #4285F4;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
         }
         
-        code {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: monospace;
+        .upload-btn:hover {
+            background: #5a95f5;
         }
         
-        .explanation {
-            margin-top: 30px;
-            padding: 20px;
-            background: rgba(40, 40, 50, 0.7);
-            border-radius: 15px;
-        }
-        
-        .explanation h2 {
-            color: #4caf50;
-            margin-top: 0;
-        }
-        
-        .fixed-item {
-            color: #4caf50;
-            font-weight: bold;
-        }
-        
-        footer {
-            margin-top: 30px;
-            text-align: center;
-            color: #aaa;
-            font-size: 0.9rem;
+        #file-upload {
+            display: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Circular Audio Player</h1>
-            <p class="subtitle">With Fixed Progress Animation</p>
+            <h1>Voice Conversion Demo</h1>
+            <p>Compare source, reference and generated samples</p>
         </header>
         
-        <div class="player-container">
-            <div class="player-wrapper">
-                <svg width="200" height="200" viewBox="0 0 200 200">
-                    <!-- Background circle -->
-                    <circle cx="100" cy="100" r="90" class="bg-circle"/>
-                    <!-- Progress circle -->
-                    <circle id="progress" cx="100" cy="100" r="90" class="progress-path"/>
-                </svg>
-                <div id="play-btn" class="play-btn">
-                    <div id="play-icon"></div>
-                </div>
-            </div>
-            <div class="file-name" id="file-name">yearn_for_time.mp3</div>
+        <div class="samples-container">
+            <table class="sample-table">
+                <thead>
+                    <tr>
+                        <th>Source (Blue)</th>
+                        <th>Reference (Red)</th>
+                        <th>Generated (Green)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Sample Set 1 -->
+                    <tr>
+                        <td class="source">
+                            <div class="sample-type">Source 1</div>
+                            <div class="player-wrapper">
+                                <svg viewBox="0 0 120 120">
+                                    <circle cx="60" cy="60" r="54" class="bg-circle"/>
+                                    <circle class="progress-path" cx="60" cy="60" r="54"/>
+                                </svg>
+                                <div class="play-btn" onclick="togglePlay('audio-source1')">
+                                    <div class="play-icon" id="icon-source1"></div>
+                                </div>
+                            </div>
+                            <div class="file-name">source_1.wav</div>
+                            <audio id="audio-source1" preload="auto" ontimeupdate="updateProgress('audio-source1', 'progress-source1')" onended="resetPlayer('audio-source1', 'icon-source1', 'progress-source1')">
+                                <source src="samples/source_1.wav" type="audio/wav">
+                            </audio>
+                        </td>
+                        <td class="reference">
+                            <div class="sample-type">Reference 1</div>
+                            <div class="player-wrapper">
+                                <svg viewBox="0 0 120 120">
+                                    <circle cx="60" cy="60" r="54" class="bg-circle"/>
+                                    <circle class="progress-path" cx="60" cy="60" r="54"/>
+                                </svg>
+                                <div class="play-btn" onclick="togglePlay('audio-ref1')">
+                                    <div class="play-icon" id="icon-ref1"></div>
+                                </div>
+                            </div>
+                            <div class="file-name">reference_1.wav</div>
+                            <audio id="audio-ref1" preload="auto" ontimeupdate="updateProgress('audio-ref1', 'progress-ref1')" onended="resetPlayer('audio-ref1', 'icon-ref1', 'progress-ref1')">
+                                <source src="samples/reference_1.wav" type="audio/wav">
+                            </audio>
+                        </td>
+                        <td class="generated">
+                            <div class="sample-type">Generated 1</div>
+                            <div class="player-wrapper">
+                                <svg viewBox="0 0 120 120">
+                                    <circle cx="60" cy="60" r="54" class="bg-circle"/>
+                                    <circle class="progress-path" cx="60" cy="60" r="54"/>
+                                </svg>
+                                <div class="play-btn" onclick="togglePlay('audio-gen1')">
+                                    <div class="play-icon" id="icon-gen1"></div>
+                                </div>
+                            </div>
+                            <div class="file-name">generated_1.wav</div>
+                            <audio id="audio-gen1" preload="auto" ontimeupdate="updateProgress('audio-gen1', 'progress-gen1')" onended="resetPlayer('audio-gen1', 'icon-gen1', 'progress-gen1')">
+                                <source src="samples/generated_1.wav" type="audio/wav">
+                            </audio>
+                        </td>
+                    </tr>
+                    
+                    <!-- Sample Set 2 -->
+                    <tr>
+                        <td class="source">
+                            <div class="sample-type">Source 2</div>
+                            <div class="player-wrapper">
+                                <svg viewBox="0 0 120 120">
+                                    <circle cx="60" cy="60" r="54" class="bg-circle"/>
+                                    <circle class="progress-path" cx="60" cy="60" r="54"/>
+                                </svg>
+                                <div class="play-btn" onclick="togglePlay('audio-source2')">
+                                    <div class="play-icon" id="icon-source2"></div>
+                                </div>
+                            </div>
+                            <div class="file-name">source_2.wav</div>
+                            <audio id="audio-source2" preload="auto" ontimeupdate="updateProgress('audio-source2', 'progress-source2')" onended="resetPlayer('audio-source2', 'icon-source2', 'progress-source2')">
+                                <source src="samples/source_2.wav" type="audio/wav">
+                            </audio>
+                        </td>
+                        <td class="reference">
+                            <div class="sample-type">Reference 2</div>
+                            <div class="player-wrapper">
+                                <svg viewBox="0 0 120 120">
+                                    <circle cx="60" cy="60" r="54" class="bg-circle"/>
+                                    <circle class="progress-path" cx="60" cy="60" r="54"/>
+                                </svg>
+                                <div class="play-btn" onclick="togglePlay('audio-ref2')">
+                                    <div class="play-icon" id="icon-ref2"></div>
+                                </div>
+                            </div>
+                            <div class="file-name">reference_2.wav</div>
+                            <audio id="audio-ref2" preload="auto" ontimeupdate="updateProgress('audio-ref2', 'progress-ref2')" onended="resetPlayer('audio-ref2', 'icon-ref2', 'progress-ref2')">
+                                <source src="samples/reference_2.wav" type="audio/wav">
+                            </audio>
+                        </td>
+                        <td class="generated">
+                            <div class="sample-type">Generated 2</div>
+                            <div class="player-wrapper">
+                                <svg viewBox="0 0 120 120">
+                                    <circle cx="60" cy="60" r="54" class="bg-circle"/>
+                                    <circle class="progress-path" cx="60" cy="60" r="54"/>
+                                </svg>
+                                <div class="play-btn" onclick="togglePlay('audio-gen2')">
+                                    <div class="play-icon" id="icon-gen2"></div>
+                                </div>
+                            </div>
+                            <div class="file-name">generated_2.wav</div>
+                            <audio id="audio-gen2" preload="auto" ontimeupdate="updateProgress('audio-gen2', 'progress-gen2')" onended="resetPlayer('audio-gen2', 'icon-gen2', 'progress-gen2')">
+                                <source src="samples/generated_2.wav" type="audio/wav">
+                            </audio>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         
-        <div class="instructions">
-            <h2>How to Use</h2>
-            <p>To implement this fixed circular player in your IPython environment:</p>
-            <ol>
-                <li>Replace the hardcoded <code>stroke-dasharray</code> with the calculated circumference</li>
-                <li>Use <code>getTotalLength()</code> for accurate circle measurement</li>
-                <li>Update the progress calculation to use the actual circumference</li>
-                <li>Ensure the SVG circle has the correct radius (90 in this case)</li>
-            </ol>
+        <div class="upload-section">
+            <h2>Upload Your Own Samples</h2>
+            <input type="file" id="file-upload" accept="audio/*" multiple>
+            <label for="file-upload" class="upload-btn">Choose Audio Files</label>
+            <p id="upload-status">No files selected</p>
         </div>
-        
-        <div class="explanation">
-            <h2>What Was Fixed</h2>
-            <ul>
-                <li><span class="fixed-item">Progress calculation</span> - Now uses actual circle circumference</li>
-                <li><span class="fixed-item">SVG rendering</span> - Correct circle radius and attributes</li>
-                <li><span class="fixed-item">Animation</span> - Smooth progress animation during playback</li>
-                <li><span class="fixed-item">Initial state</span> - Properly reset on audio end</li>
-            </ul>
-        </div>
-        
-        <footer>
-            <p>Circular Audio Player with Fixed Animation | Works in Jupyter/IPython environments</p>
-        </footer>
     </div>
-    
-    <audio id="audio-player" preload="auto">
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    </audio>
-    
+
     <script>
+        // Initialize all players
         document.addEventListener('DOMContentLoaded', function() {
-            // Elements
-            const audio = document.getElementById('audio-player');
-            const button = document.getElementById('play-btn');
-            const icon = document.getElementById('play-icon');
-            const progress = document.getElementById('progress');
-            const fileName = document.getElementById('file-name');
-            
-            // Constants
-            const circumference = 2 * Math.PI * 90;
-            let isPlaying = false;
-            let animationFrame;
-            
-            // Set initial stroke properties
-            progress.style.strokeDasharray = circumference;
-            progress.style.strokeDashoffset = circumference;
-            
-            // Show play icon (triangle)
-            function showPlayIcon() {
+            // Set initial play icons
+            document.querySelectorAll('.play-icon').forEach(icon => {
                 icon.innerHTML = `
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
                         <path d="M8 5v14l11-7z"/>
                     </svg>
                 `;
-            }
+            });
             
-            // Show pause icon (two bars)
-            function showPauseIcon() {
-                icon.innerHTML = `
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
-                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-                    </svg>
-                `;
-            }
-            
-            // Update progress circle
-            function updateProgress() {
-                if (audio.duration) {
-                    const percent = audio.currentTime / audio.duration;
-                    const offset = circumference - (percent * circumference);
-                    progress.style.strokeDashoffset = offset;
-                }
+            // Handle file uploads
+            document.getElementById('file-upload').addEventListener('change', function(e) {
+                const files = e.target.files;
+                document.getElementById('upload-status').textContent = 
+                    files.length > 0 ? `${files.length} file(s) selected` : 'No files selected';
                 
-                if (isPlaying) {
-                    animationFrame = requestAnimationFrame(updateProgress);
-                }
-            }
-            
-            // Toggle playback
-            button.addEventListener('click', () => {
-                if (isPlaying) {
-                    audio.pause();
-                    cancelAnimationFrame(animationFrame);
-                    showPlayIcon();
-                } else {
-                    audio.play();
-                    showPauseIcon();
-                    updateProgress();
-                }
-                isPlaying = !isPlaying;
+                // Here you would handle the upload process
+                // For a real implementation, you would need server-side code
+                console.log("Files selected:", files);
             });
-            
-            // Reset on end
-            audio.addEventListener('ended', () => {
-                isPlaying = false;
-                showPlayIcon();
-                progress.style.strokeDashoffset = circumference;
-                cancelAnimationFrame(animationFrame);
-            });
-            
-            // Initialize with play icon
-            showPlayIcon();
         });
+        
+        // Player control functions
+        function togglePlay(audioId) {
+            const audio = document.getElementById(audioId);
+            const iconId = 'icon-' + audioId.split('-')[1];
+            const icon = document.getElementById(iconId);
+            
+            if (audio.paused) {
+                // Pause all other players
+                document.querySelectorAll('audio').forEach(a => {
+                    if (a.id !== audioId && !a.paused) {
+                        a.pause();
+                        const otherIconId = 'icon-' + a.id.split('-')[1];
+                        showPlayIcon(otherIconId);
+                    }
+                });
+                
+                audio.play()
+                    .then(() => showPauseIcon(iconId))
+                    .catch(error => console.error("Playback failed:", error));
+            } else {
+                audio.pause();
+                showPlayIcon(iconId);
+            }
+        }
+        
+        function updateProgress(audioId, progressId) {
+            const audio = document.getElementById(audioId);
+            const progress = document.querySelector(`#${progressId}`);
+            const circumference = 2 * Math.PI * 54;
+            
+            if (audio.duration) {
+                const percent = audio.currentTime / audio.duration;
+                const offset = circumference - (percent * circumference);
+                progress.style.strokeDashoffset = offset;
+            }
+        }
+        
+        function resetPlayer(audioId, iconId, progressId) {
+            const audio = document.getElementById(audioId);
+            const progress = document.querySelector(`#${progressId}`);
+            const circumference = 2 * Math.PI * 54;
+            
+            audio.currentTime = 0;
+            showPlayIcon(iconId);
+            progress.style.strokeDashoffset = circumference;
+        }
+        
+        function showPlayIcon(iconId) {
+            const icon = document.getElementById(iconId);
+            icon.innerHTML = `
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+            `;
+        }
+        
+        function showPauseIcon(iconId) {
+            const icon = document.getElementById(iconId);
+            icon.innerHTML = `
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                </svg>
+            `;
+        }
     </script>
 </body>
 </html>
