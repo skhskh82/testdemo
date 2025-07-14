@@ -92,7 +92,7 @@ h1 {
     fill: none;
     stroke-dasharray: 565; /* 2 * π * 90 */
     stroke-dashoffset: 565;
-    transition: stroke-dashoffset 0.1s linear;
+    transition: stroke-dashoffset 10ms linear;
 }
 
 .play-btn {
