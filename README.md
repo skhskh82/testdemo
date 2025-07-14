@@ -7,7 +7,7 @@
 [![huggingface](https://img.shields.io/badge/Interactive_Demo-HuggingFace-yellow)](https://huggingface.co/spaces/cantabile-kwok/vec2wav2.0-demo)
 
 > [!IMPORTANT] 
-> This is a university project
+> This is a university project, which was done using kaggle free resources, so keep your expectations accordingly!
 
 * Comparison of our model and various famous VC models:
 
