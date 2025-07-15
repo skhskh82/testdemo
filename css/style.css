@@ -503,3 +503,49 @@ footer {
     border-radius:inherit;
 }
 .preload-metrics{margin-top:10px;font-size:.9rem;color:#ccc}
+
+/* =========================================================
+   Mobile tweaks (≤ 768 px)
+   ========================================================*/
+@media (max-width:768px){
+
+  /* 1. Let containers fill the width */
+  body{
+    align-items:stretch;          /* instead of center */
+    padding:10px;
+  }
+
+  .container{
+    width:100%;
+    margin:20px 0;                /* slimmer vertical gap */
+  }
+
+  /* 2. Stack the three players vertically */
+  .sample-row{
+    flex-direction:column;
+    align-items:center;           /* keep them centered */
+    gap:25px;                     /* tidy space between */
+  }
+
+  /* 3. Responsive player size */
+  .player-wrapper{
+    /* grows from 120 px on very small screens up to 200 px */
+    width:clamp(120px,50vw,200px);
+    height:clamp(120px,50vw,200px);
+  }
+
+  /* 4. Button and icon scale with wrapper */
+  .play-btn{
+    width:50%;                    /* half of wrapper */
+    height:50%;
+  }
+  .play-icon svg{
+    width:60%;                    /* scale icon too */
+    height:60%;
+  }
+
+  /* 5. Trim file‑name pill & popup width */
+  .file-name{max-width:90vw;}
+  .transcription-popup{max-width:95vw;}
+}
+
