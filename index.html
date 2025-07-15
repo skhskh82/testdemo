@@ -7,8 +7,29 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="container">
+    <!-- ↓↓↓ NEW: full‑screen progress overlay -->
+    <div id="preload" class="preload-overlay">
+        <div class="preload-box">
+            <div class="preload-bar-back">
+                <div id="preload-bar" class="preload-bar-front"></div>
+            </div>
+            <div id="preload-text" class="preload-metrics">Preparing audio…</div>
+        </div>
+    </div>
+    <!-- Table of Contents -->
+    <nav id="toc" class="toc">
+        <ul>
+            <li><a href="#section1" class="toc-link">Voice Conversion Demo</a></li>
+            <li><a href="#section2" class="toc-link">Ablation Study</a></li>
+        </ul>
+    </nav>
+
+    <div class="container" id="section1">
         <!-- Header content -->
+        <header class="header">
+            <h1 class="gold-title" data-text="Voice Conversion Demo">Voice Conversion Demo</h1>
+            <p class="subtitle">Compare Source, Reference, and Generated audio samples</p>
+        </header>
         
         <div class="sample-row">
             <div id="source-1" class="player-container"></div>
@@ -16,8 +37,36 @@
             <div id="generated-1" class="player-container"></div>
         </div>
         
-        <!-- More sample rows as needed -->
+        <div class="sample-row">
+            <div id="source-2" class="player-container"></div>
+            <div id="reference-2" class="player-container"></div>
+            <div id="generated-2" class="player-container"></div>
+        </div>
         
+        <div class="sample-row">
+            <div id="source-3" class="player-container"></div>
+            <div id="reference-3" class="player-container"></div>
+            <div id="generated-3" class="player-container"></div>
+        </div>
+
+        <div class="sample-row">
+            <div id="source-4" class="player-container"></div>
+            <div id="reference-4" class="player-container"></div>
+            <div id="generated-4" class="player-container"></div>
+        </div>
+
+        <div class="sample-row">
+            <div id="source-5" class="player-container"></div>
+            <div id="reference-5" class="player-container"></div>
+            <div id="generated-5" class="player-container"></div>
+        </div>
+
+        <div class="sample-row">
+            <div id="source-6" class="player-container"></div>
+            <div id="reference-6" class="player-container"></div>
+            <div id="generated-6" class="player-container"></div>
+        </div>
+
         <script src="js/player.js"></script>
         <script>
             // Initialize players when DOM loads
@@ -27,7 +76,8 @@
                     containerId: 'source-1',
                     audioSrc: 'samples/source_1.wav',
                     fileName: 'source_1.wav',
-                    playerColor: '#4285F4' // Blue
+                    playerColor: '#4285F4', // Blue
+                    transcription: "This is the transcription for source audio sample 1 so i want to test how big it can get lol any way what are your plans for tonight?."
                 });
                 
                 createCircularPlayer({
@@ -44,9 +94,208 @@
                     playerColor: '#34A853' // Green
                 });
                 
-                // Add more players as needed
+                createCircularPlayer({
+                    containerId: 'source-2',
+                    audioSrc: 'samples/source_2.wav',
+                    fileName: 'source_2.wav',
+                    playerColor: '#4285F4', // Blue
+                    transcription: "This is the transcription for source audio sample 1 so i want to test how big it can get lol any way what are your plans for tonight?."
+                });
+                
+                createCircularPlayer({
+                    containerId: 'reference-2',
+                    audioSrc: 'samples/reference_2.wav',
+                    fileName: 'reference_2.wav',
+                    playerColor: '#EA4335' // Red
+                });
+                
+                createCircularPlayer({
+                    containerId: 'generated-2',
+                    audioSrc: 'samples/generated_2.wav',
+                    fileName: 'generated_2.wav',
+                    playerColor: '#34A853' // Green
+                });
+
+                createCircularPlayer({
+                    containerId: 'source-3',
+                    audioSrc: 'samples/source_3.wav',
+                    fileName: 'source_3.wav',
+                    playerColor: '#4285F4', // Blue
+                    transcription: "This is the transcription for source audio sample 1 so i want to test how big it can get lol any way what are your plans for tonight?."
+                });
+                
+                createCircularPlayer({
+                    containerId: 'reference-3',
+                    audioSrc: 'samples/reference_3.wav',
+                    fileName: 'reference_3.wav',
+                    playerColor: '#EA4335' // Red
+                });
+                
+                createCircularPlayer({
+                    containerId: 'generated-3',
+                    audioSrc: 'samples/generated_3.wav',
+                    fileName: 'generated_3.wav',
+                    playerColor: '#34A853' // Green
+                });
+
+                createCircularPlayer({
+                    containerId: 'source-4',
+                    audioSrc: 'samples/source_4.wav',
+                    fileName: 'source_4.wav',
+                    playerColor: '#4285F4', // Blue
+                    transcription: "This is the transcription for source audio sample 1 so i want to test how big it can get lol any way what are your plans for tonight?."
+                });
+                
+                createCircularPlayer({
+                    containerId: 'reference-4',
+                    audioSrc: 'samples/reference_4.wav',
+                    fileName: 'reference_4.wav',
+                    playerColor: '#EA4335' // Red
+                });
+                
+                createCircularPlayer({
+                    containerId: 'generated-4',
+                    audioSrc: 'samples/generated_4.wav',
+                    fileName: 'generated_4.wav',
+                    playerColor: '#34A853' // Green
+                });
+
+                createCircularPlayer({
+                    containerId: 'source-5',
+                    audioSrc: 'samples/source_5.wav',
+                    fileName: 'source_5.wav',
+                    playerColor: '#4285F4', // Blue
+                    transcription: "This is the transcription for source audio sample 1 so i want to test how big it can get lol any way what are your plans for tonight?."
+                });
+                
+                createCircularPlayer({
+                    containerId: 'reference-5',
+                    audioSrc: 'samples/reference_5.wav',
+                    fileName: 'reference_5.wav',
+                    playerColor: '#EA4335' // Red
+                });
+                
+                createCircularPlayer({
+                    containerId: 'generated-5',
+                    audioSrc: 'samples/generated_5.wav',
+                    fileName: 'generated_5.wav',
+                    playerColor: '#34A853' // Green
+                });
+
+                createCircularPlayer({
+                    containerId: 'source-6',
+                    audioSrc: 'samples/source_6.wav',
+                    fileName: 'source_6.wav',
+                    playerColor: '#4285F4', // Blue
+                    transcription: "This is the transcription for source audio sample 1 so i want to test how big it can get lol any way what are your plans for tonight?."
+                });
+                
+                createCircularPlayer({
+                    containerId: 'reference-6',
+                    audioSrc: 'samples/reference_6.wav',
+                    fileName: 'reference_6.wav',
+                    playerColor: '#EA4335' // Red
+                });
+                
+                createCircularPlayer({
+                    containerId: 'generated-6',
+                    audioSrc: 'samples/generated_6.wav',
+                    fileName: 'generated_6.wav',
+                    playerColor: '#34A853' // Green
+                });
+
             });
         </script>
     </div>
+    
+    <!-- New container below the first with a gap -->
+    <div class="container" id="section2" style="margin-top: 80px;">
+        <header class="header">
+            <h1 class="gold-title" data-text="Ablation study">Ablation study</h1>
+            <p class="subtitle">Experimental results: Prosody manipulation in synthesized speech</p>
+        </header>
+        
+        <div class="image-section">
+            <div class="image-container">
+                <img src="images/image1.png" alt="Sample Image">
+            </div>
+        </div>
+        
+        <div class="sample-row">
+            <div id="source-11" class="player-container"></div>
+            <div id="reference-11" class="player-container"></div>
+            <div id="generated-11" class="player-container"></div>
+        </div>
+
+        <div class="image-section">
+            <div class="image-container">
+                <img src="images/image1.png" alt="Sample Image">
+            </div>
+        </div>
+        
+        <div class="sample-row">
+            <div id="source-12" class="player-container"></div>
+            <div id="reference-12" class="player-container"></div>
+            <div id="generated-12" class="player-container"></div>
+        </div>
+        
+        <script src="js/player.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Sample 4
+                createCircularPlayer({
+                    containerId: 'source-11',
+                    audioSrc: 'samples/source_11.wav',
+                    fileName: 'source_11.wav',
+                    playerColor: '#4285F4' // Blue
+                });
+                
+                createCircularPlayer({
+                    containerId: 'reference-11',
+                    audioSrc: 'samples/reference_11.wav',
+                    fileName: 'reference_11.wav',
+                    playerColor: '#EA4335' // Red
+                });
+                
+                createCircularPlayer({
+                    containerId: 'generated-11',
+                    audioSrc: 'samples/generated_11.wav',
+                    fileName: 'generated_11.wav',
+                    playerColor: '#34A853' // Green
+                });
+                
+                createCircularPlayer({
+                    containerId: 'source-12',
+                    audioSrc: 'samples/source_12.wav',
+                    fileName: 'source_12.wav',
+                    playerColor: '#4285F4' // Blue
+                });
+                
+                createCircularPlayer({
+                    containerId: 'reference-12',
+                    audioSrc: 'samples/reference_12.wav',
+                    fileName: 'reference_12.wav',
+                    playerColor: '#EA4335' // Red
+                });
+                
+                createCircularPlayer({
+                    containerId: 'generated-12',
+                    audioSrc: 'samples/generated_12.wav',
+                    fileName: 'generated_12.wav',
+                    playerColor: '#34A853' // Green
+                });
+            });
+        </script>
+    </div>
+    
+    <!-- scripts moved to the bottom so preloader runs first -->
+    <script src="js/player.js"></script>
+    <script src="js/preloader.js"></script>   <!-- ← NEW -->
+    <script src="js/toc.js"></script>
+    
+    <script>
+    /* AOS init unchanged */
+        document.addEventListener('DOMContentLoaded',()=>AOS.init({offset:120,duration:600}));
+    </script>
 </body>
 </html>
