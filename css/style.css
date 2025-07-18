@@ -1,4 +1,12 @@
 /* Base Styles */
+/* global palette */
+:root{
+    --accent : #34A853;                     /* primary highlight  */
+    --neutral: rgba(255,255,255,.08);       /* subtle strokes     */
+    --warn   : #EA4335;                     /* keep red for ref   */
+  }
+
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     min-height: 100vh;
@@ -17,13 +25,18 @@ body {
 .container {
     max-width: 1200px;
     width: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(10px);
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4)); /* Dark-to-light gradient background */
+    backdrop-filter: blur(15px); /* Glass effect */
     border-radius: 20px;
     padding: 30px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    margin: 40px 0; /* Updated for consistency */
+    margin: 40px 0;
+
+    /* 3D shadow effect */
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 15px 30px rgba(255, 255, 255, 0.1); /* Stronger shadow for depth */
 }
+
+
 
 /* Table of Contents */
 .toc {
@@ -39,13 +52,6 @@ body {
     z-index: 1000;
     display: flex;
     align-items: center; /* Vertically center logo and links */
-}
-
-.toc-logo {
-    width: 50px; /* Adjust based on your logo size */
-    height: auto;
-    margin-left: 20px; /* Space from the left edge */
-    margin-right: 15px; /* Space between logo and links */
 }
 
 .toc ul {
@@ -186,7 +192,7 @@ h1 {
     margin: 0;
     position: relative;
     display: inline-block;
-    background: linear-gradient(90deg, #FFD700, #FFEC8B, #FFD700);
+    background: #FFD700;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -329,18 +335,20 @@ h1 {
     margin: 0;
     cursor: pointer;
     z-index: 10;
+    transform-origin: bottom right;
     transition: transform 0.3s ease;
 }
 
 .transcription-toggle:hover {
-    transform: scale(1.2);
+    transform: scale(1.2) translate(-5px, -5px); /* Scale from bottom-right and shift */
+    transform-origin: bottom right; /* Scale from the bottom-right corner */
 }
 
-/* Remove any background effects on hover */
-.transcription-toggle:hover {
-    background: transparent;
+.transcription-toggle:hover + .transcription-popup {
+    opacity: 1; /* Makes it visible when hovering the icon */
+    pointer-events: all; /* Allows interaction */
+    transform: scale(1);  /* Displays the popup */
 }
-
 .transcript-icon {
     width: 180%;
     height: 180%;
@@ -350,11 +358,10 @@ h1 {
 
 .transcription-popup {
     position: absolute;
-    top: -150%; /* Aligns top of popup with top of icon */
-    right: 80%; /* Positions popup to the left of the icon */
+    top: 20%; /* Aligns top of popup with top of icon */
+    right: auto; /* Positions popup to the left of the icon */
     margin-right: 10px; /* Adds space between popup and icon */
-    width: 300px;
-    max-width: 90%;
+    width: 500px;
     background: rgba(0, 0, 0, 0.9);
     border-radius: 10px;
     padding: 15px;
@@ -364,11 +371,11 @@ h1 {
     z-index: 100;
     pointer-events: none;
     transform: scale(0);
-    transform-origin: top right; /* Ensures scaling animation starts from top-right corner */
+    transform-origin: top left; /* Ensures scaling animation starts from top-right corner */
 }
 
 .transcription-popup.active {
-    transform: translateX(-50%) scale(1);
+    transform: translateX(50%) scale(1);
     opacity: 1;
     pointer-events: all;
 }
@@ -376,6 +383,14 @@ h1 {
 .transcription-content {
     overflow-y: auto;
     line-height: 1.5;
+}
+
+/* Make the popup visible on hover over the icon or the popup itself */
+.transcription-toggle:hover + .transcription-popup,
+.transcription-popup:hover {
+    opacity: 1;  /* Makes it visible when hovering the icon or the popup */
+    pointer-events: all; /* Allows interaction */
+    transform: scale(1);  /* Displays the popup */
 }
 
 /* Color Variants */
@@ -507,45 +522,368 @@ footer {
 /* =========================================================
    Mobile tweaks (≤ 768 px)
    ========================================================*/
-@media (max-width:768px){
+   @media (max-width:768px){
 
-  /* 1. Let containers fill the width */
-  body{
-    align-items:stretch;          /* instead of center */
-    padding:10px;
+    /* 1. Let containers fill the width */
+    body{
+      align-items:stretch;          /* instead of center */
+      padding:10px;
+    }
+  
+    .container{
+      width:100%;
+      margin:20px 0;                /* slimmer vertical gap */
+    }
+  
+    /* 2. Stack the three players vertically */
+    .sample-row{
+      flex-direction:column;
+      align-items:center;           /* keep them centered */
+      gap:25px;                     /* tidy space between */
+    }
+  
+    /* 3. Responsive player size */
+    .player-wrapper{
+      /* grows from 120 px on very small screens up to 200 px */
+      width:clamp(120px,50vw,200px);
+      height:clamp(120px,50vw,200px);
+    }
+  
+    /* 4. Button and icon scale with wrapper */
+    .play-btn{
+      width:50%;                    /* half of wrapper */
+      height:50%;
+    }
+    .play-icon svg{
+      width:60%;                    /* scale icon too */
+      height:60%;
+    }
+  
+    /* 5. Trim file‑name pill & popup width */
+    .file-name{max-width:90vw;}
+    .transcription-popup{max-width:95vw;}
   }
-
-  .container{
+  
+/* ───── Ablation grid – desktop first ─────────────────────────────────── */
+.ab-grid{
+    display:grid;
+    grid-template-columns: 220px 1fr; /* left: fixed width for circles, right: flex */
+    grid-template-rows:auto auto auto; /* top row + two gen rows */
+    gap:40px 30px;                     /* row / col gaps */
+    align-items:center;
+  }
+  
+  /* Top row spans 2 columns & is centered */
+  .ab-top{
+    grid-column: span 1;
+    justify-self:center;
+  }
+  .ab-top:first-of-type{grid-column:1;}      /* source */
+  .ab-top:last-of-type {grid-column:2;}      /* ref    */
+  
+  /* Left column players */
+  .ab-left{
+    justify-self:start;
+    padding-left: 40px;
+  }
+  
+  /* Right column images take full width */
+  .ab-right img{
     width:100%;
-    margin:20px 0;                /* slimmer vertical gap */
+    border-radius:8px;
   }
-
-  /* 2. Stack the three players vertically */
-  .sample-row{
-    flex-direction:column;
-    align-items:center;           /* keep them centered */
-    gap:25px;                     /* tidy space between */
-  }
-
-  /* 3. Responsive player size */
-  .player-wrapper{
-    /* grows from 120 px on very small screens up to 200 px */
-    width:clamp(120px,50vw,200px);
-    height:clamp(120px,50vw,200px);
-  }
-
-  /* 4. Button and icon scale with wrapper */
-  .play-btn{
-    width:50%;                    /* half of wrapper */
-    height:50%;
-  }
-  .play-icon svg{
-    width:60%;                    /* scale icon too */
-    height:60%;
-  }
-
-  /* 5. Trim file‑name pill & popup width */
-  .file-name{max-width:90vw;}
-  .transcription-popup{max-width:95vw;}
+  
+  /* Optional: align top of genA row with centre of source/ref row */
+  #genA-player{margin-top:10px;}
+  #src-player {
+    margin-left: 200px;
 }
 
+/* ───── One self‑contained ablation set ─────────────────────────────── */
+.ab-set{
+    display:grid;
+    grid-template-columns: 220px 1fr;   /* left: fixed for players, right: images */
+    grid-template-rows: auto auto;      /* row0 = src+ref, row1 = genA+B */
+    gap:40px 30px;                      /* row / col gaps like before */
+    position:relative;
+    margin-bottom:80px;                 /* space before next set */
+    align-items:center;
+  }
+  
+  /* draw gradient rule under each set except the last */
+  .ab-set:not(:last-child)::after{
+    content:"";
+    position:absolute;
+    left:10%; right:10%; bottom:-40px;
+    height:1px;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);
+  }
+  
+  /* column placement helpers */
+  .ab-ref  {grid-column:2;}
+  .ab-gen  {grid-column:1;}
+  .ab-img  {grid-column:2;}
+  
+  /* tiny nudge so Gen‑A row aligns visually */
+  .ab-gen.first{margin-top:10px;}
+  
+  .ab-img img{width:100%;border-radius:8px;}
+  
+
+/* Put the flex strip in its own row spanning both columns */
+.ab-top-row{
+    grid-column: 1 / 3;             /* span the full grid width */
+    display:flex;
+    justify-content:center;         /* centre as a pair */
+    gap:120px;                      /* space between blue & red; tweak as you like */
+}
+
+.play-btn{
+    transition: transform .25s cubic-bezier(.25,.8,.25,1),
+                filter    .25s cubic-bezier(.25,.8,.25,1);
+  }
+  .play-btn:hover{
+    filter   : drop-shadow(0 0 3px currentColor);
+  }
+
+
+
+/* TOC logo that can change hue */
+.toc-logo{
+    width:60px;
+    height:60px;
+    margin-right:8px;
+    flex-shrink:0;
+    color:#ffffff;                         /* idle = white */
+    transition: color .25s, filter .25s;   /* smooth tint swap */
+    filter: drop-shadow(0 0 6px currentColor);
+  }
+  
+/* keep next to the SVG rules */
+.toc-logo-text{
+    font: 600 1.4rem/1 'Inter', sans-serif; /* or whatever you use */
+    letter-spacing:-.5px;
+    color:#ffffff;          /* stays white while the X tints */
+    margin-left:6px;        /* little gap after the X */
+    user-select:none;
+    pointer-events:none;
+    text-shadow:0 0 5px rgba(255,255,255,.25);  /* soft glow */
+  }
+
+.toc-logo{
+    transform:translate(10px, -3px)
+  }
+  
+   
+
+/* ========== Combo layout: blue + green … gap … red + 4 purple ========== */
+.sample-row.layout‑combo{
+    display:flex;
+    justify-content:center;   /* centre whole thing */
+    align-items:center;
+    gap:5vw;                  /* gap between left & right clusters */
+  }
+  
+  /* blue + green, side‑by‑side */
+  .cluster-left{
+    display:flex;
+    gap:48px;                 /* tweak spacing between blue & green */
+  }
+  
+  /* red + purple grid */
+  .cluster-right{
+    display:flex;
+    gap:40px;                 /* space between red and purple grid */
+    align-items:center;
+  }
+  
+  /* 2×2 purple players */
+  .purple-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:24px;
+  }
+  
+  /* shrink the purple players */
+  .player-container.small .player-wrapper{
+    width:120px;              /* main players = 200px by your JS/CSS, so 120 is ~60% */
+    height:120px;
+  }
+  .player-container.small .play-btn{
+    width:50%; height:50%;
+  }
+  .player-container.small .play-icon svg{
+    width:60%; height:60%;
+  }
+  .player-container.small .file-name{
+    max-width:140px;
+    font-size:.8rem;
+  }
+  
+
+  /* ===== HERO / INTRO ======================================================= */
+.hero{
+    width:100%;
+    padding:8vh 0 10vh;
+    background:none;
+    backdrop-filter:blur(12px);
+    display:flex;
+    justify-content:center;
+  }
+  
+  .hero-inner{
+    max-width:1200px;
+    text-align:center;
+    padding:0 30px;
+  }
+  /* title */
+  .hero-title{
+    font-size:3.5rem;
+    line-height:1.15;
+    margin:0;
+    font-weight:900;
+    background:linear-gradient(90deg,#ffdf40,#ff914d);
+    -webkit-background-clip:text;
+    color:transparent;
+  }
+  .hero-title span{
+    display:block;
+    font-size:1.5rem;
+    font-weight:600;
+    letter-spacing:.05em;
+    margin-top:.3em;
+    background:none;
+    color:#fff;
+  }
+  /* tagline */
+  .hero-tagline{
+    margin:24px auto 40px;
+    font-size:1.15rem;
+    color:#ddd;
+    max-width:700px;
+  }
+  /* gallery row */
+  .hero-gallery{
+    display:flex;
+    gap:24px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-bottom:48px;
+  }
+  .hero-gallery img{
+    width:220px; height:140px; object-fit:cover;
+    border-radius:12px;
+    box-shadow:0 4px 16px rgba(0,0,0,.35);
+  }
+  /* call‑to‑action button */
+  .hero-cta{
+    display:inline-block;
+    padding:14px 32px;
+    border-radius:30px;
+    font-size:1.1rem;
+    font-weight:600;
+    color:#fff;
+    background:#4285F4;
+    text-decoration:none;
+    box-shadow:0 4px 14px rgba(0,0,0,.3);
+    transition:background .25s, transform .25s;
+  }
+  .hero-cta:hover{
+    background:#5a9afc;
+    transform:translateY(-2px);
+  }
+  /* small screens */
+  @media(max-width:768px){
+    .hero-title{font-size:2.4rem;}
+    .hero-gallery img{width:48%; height:120px;}
+  }
+  
+  /* outer flex band stays slim – only framing */
+.hero{
+    display:flex;
+    justify-content:center;
+    padding:6vh 0 8vh;
+  }
+  
+  /* glass card, cloned from .container */
+  .hero-box{
+    max-width:1200px;
+    width:100%;
+    padding:60px 40px;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4)); /* Dark-to-light gradient background */
+    backdrop-filter: blur(15px); /* Glass effect */
+    border-radius:20px;
+    box-shadow:0 20px 50px rgba(0,0,0,.6),
+               0 15px 30px rgba(255,255,255,.1);
+    text-align:center;
+  }
+  
+  /* keep everything else (title, tagline, gallery, cta) as before */
+  html{
+    scroll-behavior:smooth;
+  }
+  
+  .hero-gallery img{
+    width:550px;      /* narrower */
+    height:270px;     /* keep 16:10 ratio, or whatever you prefer */
+  }
+  
+  @media(max-width:768px){        /* mobile override */
+    .hero-gallery img{
+      width:45vw;     /* two‑per‑row on phones */
+      height:auto;
+    }
+  }
+
+  .hero-email{
+    color:#8ab4ff;            /* subtle blue */
+    text-decoration:none;     /* no underline by default */
+    font-weight:600;
+    transition:color .25s;
+  }
+  .hero-email:hover{
+    color:#c7dbff;
+    text-decoration:underline;
+  }
+  
+  /* shared look for email + GitHub links */
+.hero-link{
+    color:#8ab4ff;          /* subtle blue that fits dark theme */
+    text-decoration:none;
+    font-weight:600;
+    transition:color .25s;
+  }
+  .hero-link:hover{
+    color:#c7dbff;
+    text-decoration:underline;
+  }
+  /* ───── VC row layout ─────────────────────────────────────────── */
+.vc-layout{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:6vw;                   /* space between left (blue+green) and right cluster */
+    margin-bottom:60px;        /* keep your existing row spacing */
+  }
+  
+  /* blue + green side‑by‑side */
+  .vc-left{
+    display:flex;
+    gap:48px;                  /* space between blue and green */
+  }
+  
+  /* red + purple  block */
+  .vc-right{
+    display:flex;
+    align-items:center;
+    gap:40px;                  /* space between red and purple grid */
+  }
+  
+  /* 2×2 grid for purple players */
+  .vc-purple-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:28px;                  /* space between the four purple discs */
+  }
+  
+  

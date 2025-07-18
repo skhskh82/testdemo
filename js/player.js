@@ -6,14 +6,14 @@ function createCircularPlayer(options) {
         playerColor: '#4285F4',
         playerSize: 100,
         playerId: 'player-' + Math.random().toString(36).substr(2, 9),
-        transcription: ''
+        transcription: '',
+        label: '',  // New option for custom labels
     };
-    const config = {...defaults, ...options};
+    const config = { ...defaults, ...options };
     
     const radius = config.playerSize / 2 - 8;
     const circumference = 2 * Math.PI * radius;
-    
-    // Only include transcription elements for source players (blue)
+    const tocLogo = document.getElementById('toc-logo');
     const isSourcePlayer = config.playerColor === '#4285F4';
     const transcriptionHTML = isSourcePlayer ? `
         <button class="transcription-toggle">
@@ -27,18 +27,17 @@ function createCircularPlayer(options) {
     const playerHTML = `
     <div class="player-wrapper" style="width: ${config.playerSize}px; height: ${config.playerSize}px;">
         <svg viewBox="0 0 ${config.playerSize} ${config.playerSize}">
-            <circle cx="${config.playerSize/2}" cy="${config.playerSize/2}" r="${radius}" class="bg-circle"/>
-            <circle id="progress-${config.playerId}" cx="${config.playerSize/2}" cy="${config.playerSize/2}" r="${radius}" 
+            <circle cx="${config.playerSize / 2}" cy="${config.playerSize / 2}" r="${radius}" class="bg-circle"/>
+            <circle id="progress-${config.playerId}" cx="${config.playerSize / 2}" cy="${config.playerSize / 2}" r="${radius}" 
                     class="progress-path" style="stroke: ${config.playerColor}"/>
         </svg>
         <div id="btn-${config.playerId}" class="play-btn" 
-            style="top: 50%; left: 50%; transform: translate(-50%, -50%);
-                    width: 60px; height: 60px; background: ${config.playerColor}">
+            style="top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60px; height: 60px; background: ${config.playerColor}">
             <div id="icon-${config.playerId}" class="play-icon"></div>
         </div>
         ${transcriptionHTML}
     </div>
-    <div class="file-name">${config.fileName}</div>
+    <div class="file-name">${config.label || config.fileName}</div>  <!-- Use custom label here -->
     <audio id="audio-${config.playerId}" preload="auto" data-player-type="${config.playerColor}">
         <source src="${config.audioSrc}" type="audio/${config.audioSrc.split('.').pop()}">
     </audio>`;
@@ -50,6 +49,7 @@ function createCircularPlayer(options) {
         initTranscription(config.containerId);
     }
 }
+
 
 function initPlayer(playerId, circumference, playerColor) {
     const audio = document.getElementById(`audio-${playerId}`);
@@ -84,29 +84,17 @@ function initPlayer(playerId, circumference, playerColor) {
         }
     }
 
-    function updateLogo() {
-        if (!tocLogo) return;
-        // Map playerColor to logo image
-        const logoMap = {
-            '#4285F4': 'images/logo_blue.png', // Source
-            '#EA4335': 'images/logo_red.png',  // Reference
-            '#34A853': 'images/logo_green.png' // Generated
-        };
-        tocLogo.style.opacity = '0'; // Fade out
-        setTimeout(() => {
-            tocLogo.src = logoMap[playerColor] || 'images/logo_white.png';
-            tocLogo.style.opacity = '1'; // Fade in
-        }, 150); // Match CSS transition duration
+    /* neon tints that match your players */
+    function updateLogo(color){
+    if (!tocLogo) return;
+        tocLogo.style.color  = color;          // stroke + glow change
     }
 
-    function resetLogo() {
-        if (!tocLogo) return;
-        tocLogo.style.opacity = '0';
-        setTimeout(() => {
-            tocLogo.src = 'images/logo_white.png';
-            tocLogo.style.opacity = '1';
-        }, 150);
+    function resetLogo(){
+    if (!tocLogo) return;
+        tocLogo.style.color  = '#ffffff';      // back to neutral white
     }
+
 
     btn.addEventListener('click', () => {
         if (audio.paused) {
@@ -124,7 +112,7 @@ function initPlayer(playerId, circumference, playerColor) {
             });
             audio.play().then(() => {
                 showPauseIcon();
-                updateLogo(); // Update logo based on playerColor
+                updateLogo(playerColor); // Update logo based on playerColor
                 cancelAnimationFrame(animationFrameId);
                 updateProgress();
             }).catch(console.error);
@@ -150,9 +138,4 @@ function initTranscription(containerId) {
     const container = document.getElementById(containerId);
     const toggle = container.querySelector('.transcription-toggle');
     const popup = container.querySelector('.transcription-popup');
-    
-    toggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        popup.classList.toggle('active');
-    });
 }

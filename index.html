@@ -6,6 +6,36 @@
     <title>Voice Conversion Demo</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+<!-- ========== HERO / INTRO ================================================= -->
+<header id="top" class="hero">
+    <div class="hero-box">          <!-- NEW wrapper with card styling -->
+      <h1 class="gold-title" data-text="Xpress‑VC: Expressive Voice Conversion With Joint Timbre and Prosody Transfer">Xpress‑VC: Expressive Voice Conversion With Joint Timbre and Prosody Transfer</h1>
+      <p class="hero-tagline">
+        Soheil Khalesi&nbsp;·&nbsp;
+      
+        <a href="mailto:soheilkhalesymaya@gmail.com" class="hero-link">
+          soheilkhalesymaya@gmail.com
+        </a>&nbsp;·&nbsp;
+      
+        <a href="https://github.com/skhskh82/testdemo" 
+           class="hero-link"
+           target="_blank" rel="noopener">
+          GitHub Repository
+        </a>
+      </p>
+      
+  
+      <div class="hero-gallery">
+        <img src="images/intro1.png" alt="Waveform spectrogram">
+        <img src="images/intro2.png" alt="Neural network graph">
+      </div>
+  
+      <a href="#section1" class="hero-cta">Jump to the demo ↓</a>
+    </div>
+  </header>
+  
+  <!-- /hero -->
+  
 <body>
     <!-- ↓↓↓ NEW: full‑screen progress overlay -->
     <div id="preload" class="preload-overlay">
@@ -18,12 +48,45 @@
     </div>
     <!-- Table of Contents -->
     <nav id="toc" class="toc">
+        
+    <!-- Curved‑tube neon X (both arms bowed outward) -->
+    <svg id="toc-logo" class="toc-logo" viewBox="0 0 100 100" aria-hidden="true">
+        <defs>
+        <filter id="neon-glow" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="4" result="blur"/>
+            <feMerge>
+            <feMergeNode in="blur"/>
+            <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+        </defs>
+    
+        <!-- stroke 1: top‑left → bottom‑right, bulges to the **right** -->
+        <path d="M25 25 Q60 50 75 75"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="14"
+            stroke-linecap="round"
+            filter="url(#neon-glow)"/>
+    
+        <!-- stroke 2: top‑right → bottom‑left, bulges to the **left** -->
+        <path d="M75 25 Q40 50 25 75"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="14"
+            stroke-linecap="round"
+            filter="url(#neon-glow)"/>
+    </svg>
+  
+  
+    <span class="toc-logo-text">press‑vc</span> 
+  
         <ul>
+            <li><a href="#top"        class="toc-link">Introduction</a></li>
             <li><a href="#section1" class="toc-link">Voice Conversion Demo</a></li>
             <li><a href="#section2" class="toc-link">Ablation Study</a></li>
         </ul>
     </nav>
-
     <div class="container" id="section1">
         <!-- Header content -->
         <header class="header">
@@ -31,41 +94,173 @@
             <p class="subtitle">Compare Source, Reference, and Generated audio samples</p>
         </header>
         
-        <div class="sample-row">
-            <div id="source-1" class="player-container"></div>
-            <div id="reference-1" class="player-container"></div>
-            <div id="generated-1" class="player-container"></div>
-        </div>
+        <div class="sample-row vc-layout">
+
+            <!-- LEFT CLUSTER : blue + green -->
+            <div class="vc-left">
+              <div id="source-1"    class="player-container"></div>  <!-- blue -->
+              <div id="reference-1" class="player-container"></div>  <!-- green -->
+            </div>
+          
+            <!-- RIGHT CLUSTER : red + 4 purple (2×2) -->
+            <div class="vc-right">
+              <div id="generated-1" class="player-container"></div>  <!-- red -->
+          
+              <div class="vc-purple-grid">
+                <div id="p1-1" class="player-container"></div>
+                <div id="p1-2" class="player-container"></div>
+                <div id="p1-3" class="player-container"></div>
+              </div>
+            </div>
+          
+          </div>
         
-        <div class="sample-row">
-            <div id="source-2" class="player-container"></div>
-            <div id="reference-2" class="player-container"></div>
-            <div id="generated-2" class="player-container"></div>
-        </div>
+          <div class="sample-row vc-layout">
+
+            <!-- LEFT CLUSTER : blue + green -->
+            <div class="vc-left">
+              <div id="source-2"    class="player-container"></div>  <!-- blue -->
+              <div id="reference-2" class="player-container"></div>  <!-- green -->
+            </div>
+          
+            <!-- RIGHT CLUSTER : red + 4 purple (2×2) -->
+            <div class="vc-right">
+              <div id="generated-2" class="player-container"></div>  <!-- red -->
+          
+              <div class="vc-purple-grid">
+                <div id="p2-1" class="player-container"></div>
+                <div id="p2-2" class="player-container"></div>
+                <div id="p2-3" class="player-container"></div>
+              </div>
+            </div>
+          
+          </div>
         
-        <div class="sample-row">
-            <div id="source-3" class="player-container"></div>
-            <div id="reference-3" class="player-container"></div>
-            <div id="generated-3" class="player-container"></div>
-        </div>
+          <div class="sample-row vc-layout">
 
-        <div class="sample-row">
-            <div id="source-4" class="player-container"></div>
-            <div id="reference-4" class="player-container"></div>
-            <div id="generated-4" class="player-container"></div>
-        </div>
+            <!-- LEFT CLUSTER : blue + green -->
+            <div class="vc-left">
+              <div id="source-3"    class="player-container"></div>  <!-- blue -->
+              <div id="reference-3" class="player-container"></div>  <!-- green -->
+            </div>
+          
+            <!-- RIGHT CLUSTER : red + 4 purple (2×2) -->
+            <div class="vc-right">
+              <div id="generated-3" class="player-container"></div>  <!-- red -->
+          
+              <div class="vc-purple-grid">
+                <div id="p3-1" class="player-container"></div>
+                <div id="p3-2" class="player-container"></div>
+                <div id="p3-3" class="player-container"></div>
+              </div>
+            </div>
+          
+          </div>
 
-        <div class="sample-row">
-            <div id="source-5" class="player-container"></div>
-            <div id="reference-5" class="player-container"></div>
-            <div id="generated-5" class="player-container"></div>
-        </div>
+          <div class="sample-row vc-layout">
 
-        <div class="sample-row">
-            <div id="source-6" class="player-container"></div>
-            <div id="reference-6" class="player-container"></div>
-            <div id="generated-6" class="player-container"></div>
-        </div>
+            <!-- LEFT CLUSTER : blue + green -->
+            <div class="vc-left">
+              <div id="source-4"    class="player-container"></div>  <!-- blue -->
+              <div id="reference-4" class="player-container"></div>  <!-- green -->
+            </div>
+          
+            <!-- RIGHT CLUSTER : red + 4 purple (2×2) -->
+            <div class="vc-right">
+              <div id="generated-4" class="player-container"></div>  <!-- red -->
+          
+              <div class="vc-purple-grid">
+                <div id="p4-1" class="player-container"></div>
+                <div id="p4-2" class="player-container"></div>
+                <div id="p4-3" class="player-container"></div>
+              </div>
+            </div>
+          
+          </div>
+
+          <div class="sample-row vc-layout">
+
+            <!-- LEFT CLUSTER : blue + green -->
+            <div class="vc-left">
+              <div id="source-5"    class="player-container"></div>  <!-- blue -->
+              <div id="reference-5" class="player-container"></div>  <!-- green -->
+            </div>
+          
+            <!-- RIGHT CLUSTER : red + 4 purple (2×2) -->
+            <div class="vc-right">
+              <div id="generated-5" class="player-container"></div>  <!-- red -->
+          
+              <div class="vc-purple-grid">
+                <div id="p5-1" class="player-container"></div>
+                <div id="p5-2" class="player-container"></div>
+                <div id="p5-3" class="player-container"></div>
+              </div>
+            </div>
+          
+          </div>
+
+          <div class="sample-row vc-layout">
+
+            <!-- LEFT CLUSTER : blue + green -->
+            <div class="vc-left">
+              <div id="source-6"    class="player-container"></div>  <!-- blue -->
+              <div id="reference-6" class="player-container"></div>  <!-- green -->
+            </div>
+          
+            <!-- RIGHT CLUSTER : red + 4 purple (2×2) -->
+            <div class="vc-right">
+              <div id="generated-6" class="player-container"></div>  <!-- red -->
+          
+              <div class="vc-purple-grid">
+                <div id="p6-1" class="player-container"></div>
+                <div id="p6-2" class="player-container"></div>
+                <div id="p6-3" class="player-container"></div>
+              </div>
+            </div>
+          
+          </div>
+
+          <div class="sample-row vc-layout">
+
+            <!-- LEFT CLUSTER : blue + green -->
+            <div class="vc-left">
+              <div id="source-7"    class="player-container"></div>  <!-- blue -->
+              <div id="reference-7" class="player-container"></div>  <!-- green -->
+            </div>
+          
+            <!-- RIGHT CLUSTER : red + 4 purple (2×2) -->
+            <div class="vc-right">
+              <div id="generated-7" class="player-container"></div>  <!-- red -->
+          
+              <div class="vc-purple-grid">
+                <div id="p7-1" class="player-container"></div>
+                <div id="p7-2" class="player-container"></div>
+                <div id="p7-3" class="player-container"></div>
+              </div>
+            </div>
+          
+          </div>
+
+        <div class="sample-row vc-layout">
+
+            <!-- LEFT CLUSTER : blue + green -->
+            <div class="vc-left">
+              <div id="source-8"    class="player-container"></div>  <!-- blue -->
+              <div id="reference-8" class="player-container"></div>  <!-- green -->
+            </div>
+          
+            <!-- RIGHT CLUSTER : red + 4 purple (2×2) -->
+            <div class="vc-right">
+              <div id="generated-8" class="player-container"></div>  <!-- red -->
+          
+              <div class="vc-purple-grid">
+                <div id="p8-1" class="player-container"></div>
+                <div id="p8-2" class="player-container"></div>
+                <div id="p8-3" class="player-container"></div>
+              </div>
+            </div>
+          
+          </div>
 
         <script src="js/player.js"></script>
         <script>
@@ -77,43 +272,87 @@
                     audioSrc: 'samples/source_1.wav',
                     fileName: 'source_1.wav',
                     playerColor: '#4285F4', // Blue
-                    transcription: "This is the transcription for source audio sample 1 so i want to test how big it can get lol any way what are your plans for tonight?."
+                    transcription: "The smoke itself which had formed a vast cloud over the harbor, forts and city was now drifting out to sea leaving all things etched sharply in the dazzling sunlight of a southern spring day."
                 });
                 
                 createCircularPlayer({
                     containerId: 'reference-1',
                     audioSrc: 'samples/reference_1.wav',
                     fileName: 'reference_1.wav',
-                    playerColor: '#EA4335' // Red
+                    playerColor: '#34A853' // Green
                 });
                 
                 createCircularPlayer({
                     containerId: 'generated-1',
                     audioSrc: 'samples/generated_1.wav',
-                    fileName: 'generated_1.wav',
-                    playerColor: '#34A853' // Green
+                    fileName: 'Xpress-VC (TP-VC)',
+                    playerColor: '#EA4335' // Red
                 });
+
+                createCircularPlayer({
+                    containerId : "p1-1",
+                    audioSrc    : `samples/vec2wav2_1.wav`,
+                    fileName    : `vec2wav2`,
+                    playerColor : "#9b59ff"
+                });
+
+                createCircularPlayer({
+                    containerId : "p1-2",
+                    audioSrc    : `samples/knn_vc_1.wav`,
+                    fileName    : `knn-vc`,
+                    playerColor : "#9b59ff"
+                });
+
+                createCircularPlayer({
+                    containerId : "p1-3",
+                    audioSrc    : `samples/diff_heir_vc_1.wav`,
+                    fileName    : `diff-heir-vc`,
+                    playerColor : "#9b59ff"
+                });
+
+
                 
                 createCircularPlayer({
                     containerId: 'source-2',
                     audioSrc: 'samples/source_2.wav',
                     fileName: 'source_2.wav',
                     playerColor: '#4285F4', // Blue
-                    transcription: "This is the transcription for source audio sample 1 so i want to test how big it can get lol any way what are your plans for tonight?."
+                    transcription: "Variations whether they be deviations into the higher, finer and rarer or deteriorations and monstrosities appear suddenly on the scene in the greatest exuberance and splendor the individual dares to be individual and attach himself."
                 });
                 
                 createCircularPlayer({
                     containerId: 'reference-2',
                     audioSrc: 'samples/reference_2.wav',
                     fileName: 'reference_2.wav',
-                    playerColor: '#EA4335' // Red
+                    playerColor: '#34A853' // Green
                 });
                 
                 createCircularPlayer({
                     containerId: 'generated-2',
                     audioSrc: 'samples/generated_2.wav',
-                    fileName: 'generated_2.wav',
-                    playerColor: '#34A853' // Green
+                    fileName: 'Xpress-VC (T-VC)',
+                    playerColor: '#EA4335' // Red
+                });
+
+                createCircularPlayer({
+                    containerId : "p2-1",
+                    audioSrc    : `samples/vec2wav2_2.wav`,
+                    fileName    : `vec2wav2`,
+                    playerColor : "#9b59ff"
+                });
+
+                createCircularPlayer({
+                    containerId : "p2-2",
+                    audioSrc    : `samples/knn_vc_2.wav`,
+                    fileName    : `knn-vc`,
+                    playerColor : "#9b59ff"
+                });
+
+                createCircularPlayer({
+                    containerId : "p2-3",
+                    audioSrc    : `samples/diff_heir_vc_2.wav`,
+                    fileName    : `diff-heir-vc`,
+                    playerColor : "#9b59ff"
                 });
 
                 createCircularPlayer({
@@ -121,21 +360,43 @@
                     audioSrc: 'samples/source_3.wav',
                     fileName: 'source_3.wav',
                     playerColor: '#4285F4', // Blue
-                    transcription: "This is the transcription for source audio sample 1 so i want to test how big it can get lol any way what are your plans for tonight?."
+                    transcription: "Sheriff Jones had his pockets always full of writs issued in the spirit of persecution, but was often baffled by the sharp wits and ready resources of the free state people and sometimes defied outright."
                 });
+                
                 
                 createCircularPlayer({
                     containerId: 'reference-3',
                     audioSrc: 'samples/reference_3.wav',
                     fileName: 'reference_3.wav',
-                    playerColor: '#EA4335' // Red
+                    playerColor: '#34A853' // Green
                 });
                 
                 createCircularPlayer({
                     containerId: 'generated-3',
                     audioSrc: 'samples/generated_3.wav',
-                    fileName: 'generated_3.wav',
-                    playerColor: '#34A853' // Green
+                    fileName: 'Xpress-VC (TP-VC)',
+                    playerColor: '#EA4335' // Red
+                });
+
+                createCircularPlayer({
+                    containerId : "p3-1",
+                    audioSrc    : `samples/vec2wav2_3.wav`,
+                    fileName    : `vec2wav2`,
+                    playerColor : "#9b59ff"
+                });
+
+                createCircularPlayer({
+                    containerId : "p3-2",
+                    audioSrc    : `samples/knn_vc_3.wav`,
+                    fileName    : `knn-vc`,
+                    playerColor : "#9b59ff"
+                });
+
+                createCircularPlayer({
+                    containerId : "p3-3",
+                    audioSrc    : `samples/diff_heir_vc_3.wav`,
+                    fileName    : `diff-heir-vc`,
+                    playerColor : "#9b59ff"
                 });
 
                 createCircularPlayer({
@@ -143,21 +404,42 @@
                     audioSrc: 'samples/source_4.wav',
                     fileName: 'source_4.wav',
                     playerColor: '#4285F4', // Blue
-                    transcription: "This is the transcription for source audio sample 1 so i want to test how big it can get lol any way what are your plans for tonight?."
+                    transcription: "If i go to meeting at all i like best to sit in the quiet old house in germantown where the windows are all open and i can see the trees and hear the stir of the leaves."
                 });
                 
                 createCircularPlayer({
                     containerId: 'reference-4',
                     audioSrc: 'samples/reference_4.wav',
                     fileName: 'reference_4.wav',
-                    playerColor: '#EA4335' // Red
+                    playerColor: '#34A853' // Green
                 });
                 
                 createCircularPlayer({
                     containerId: 'generated-4',
                     audioSrc: 'samples/generated_4.wav',
-                    fileName: 'generated_4.wav',
-                    playerColor: '#34A853' // Green
+                    fileName: 'Xpress-VC (T-VC)',
+                    playerColor: '#EA4335' // Red
+                });
+
+                createCircularPlayer({
+                    containerId : "p4-1",
+                    audioSrc    : `samples/vec2wav2_4.wav`,
+                    fileName    : `vec2wav2`,
+                    playerColor : "#9b59ff"
+                });
+
+                createCircularPlayer({
+                    containerId : "p4-2",
+                    audioSrc    : `samples/knn_vc_4.wav`,
+                    fileName    : `knn-vc`,
+                    playerColor : "#9b59ff"
+                });
+
+                createCircularPlayer({
+                    containerId : "p4-3",
+                    audioSrc    : `samples/diff_heir_vc_4.wav`,
+                    fileName    : `diff-heir-vc`,
+                    playerColor : "#9b59ff"
                 });
 
                 createCircularPlayer({
@@ -165,21 +447,42 @@
                     audioSrc: 'samples/source_5.wav',
                     fileName: 'source_5.wav',
                     playerColor: '#4285F4', // Blue
-                    transcription: "This is the transcription for source audio sample 1 so i want to test how big it can get lol any way what are your plans for tonight?."
+                    transcription: "I saw the lady who erewhile appeared veiled underneath the angelic festival direct her eyes to me across the river."
                 });
                 
                 createCircularPlayer({
                     containerId: 'reference-5',
                     audioSrc: 'samples/reference_5.wav',
                     fileName: 'reference_5.wav',
-                    playerColor: '#EA4335' // Red
+                    playerColor: '#34A853' // Green
                 });
                 
                 createCircularPlayer({
                     containerId: 'generated-5',
                     audioSrc: 'samples/generated_5.wav',
-                    fileName: 'generated_5.wav',
-                    playerColor: '#34A853' // Green
+                    fileName: 'Xpress-VC (T-VC)',
+                    playerColor: '#EA4335' // Red
+                });
+
+                createCircularPlayer({
+                    containerId : "p5-1",
+                    audioSrc    : `samples/vec2wav2_5.wav`,
+                    fileName    : `vec2wav2`,
+                    playerColor : "#9b59ff"
+                });
+
+                createCircularPlayer({
+                    containerId : "p5-2",
+                    audioSrc    : `samples/knn_vc_5.wav`,
+                    fileName    : `knn-vc`,
+                    playerColor : "#9b59ff"
+                });
+
+                createCircularPlayer({
+                    containerId : "p5-3",
+                    audioSrc    : `samples/diff_heir_vc_5.wav`,
+                    fileName    : `diff-heir-vc`,
+                    playerColor : "#9b59ff"
                 });
 
                 createCircularPlayer({
@@ -187,106 +490,227 @@
                     audioSrc: 'samples/source_6.wav',
                     fileName: 'source_6.wav',
                     playerColor: '#4285F4', // Blue
-                    transcription: "This is the transcription for source audio sample 1 so i want to test how big it can get lol any way what are your plans for tonight?."
+                    transcription: "His eyelids trembled as if they felt the vast cyclic movement of the earth and her watchers trembled as if they felt the strange light of some new world."
                 });
                 
                 createCircularPlayer({
                     containerId: 'reference-6',
                     audioSrc: 'samples/reference_6.wav',
                     fileName: 'reference_6.wav',
-                    playerColor: '#EA4335' // Red
+                    playerColor: '#34A853' // Green
                 });
                 
                 createCircularPlayer({
                     containerId: 'generated-6',
                     audioSrc: 'samples/generated_6.wav',
-                    fileName: 'generated_6.wav',
+                    fileName: 'Xpress-VC (TP-VC)',
+                    playerColor: '#EA4335' // Red
+                });
+
+                createCircularPlayer({
+                    containerId : "p6-1",
+                    audioSrc    : `samples/vec2wav2_6.wav`,
+                    fileName    : `vec2wav2`,
+                    playerColor : "#9b59ff"
+                });
+
+                createCircularPlayer({
+                    containerId : "p6-2",
+                    audioSrc    : `samples/knn_vc_6.wav`,
+                    fileName    : `knn-vc`,
+                    playerColor : "#9b59ff"
+                });
+
+                createCircularPlayer({
+                    containerId : "p6-3",
+                    audioSrc    : `samples/diff_heir_vc_6.wav`,
+                    fileName    : `diff-heir-vc`,
+                    playerColor : "#9b59ff"
+                });
+
+                createCircularPlayer({
+                    containerId: 'source-7',
+                    audioSrc: 'samples/source_7.wav',
+                    fileName: 'source_7.wav',
+                    playerColor: '#4285F4', // Blue
+                    transcription: "Then they sped in great haste for the door, and the goat gave a final butt that sent the row of royal ladies all diving into the corridor in another tangle, whereupon they shrieked in a manner that terrified everyone within sound of their voices."
+                });
+                
+                createCircularPlayer({
+                    containerId: 'reference-7',
+                    audioSrc: 'samples/reference_7.wav',
+                    fileName: 'reference_7.wav',
                     playerColor: '#34A853' // Green
+                });
+                
+                createCircularPlayer({
+                    containerId: 'generated-7',
+                    audioSrc: 'samples/generated_7.wav',
+                    fileName: 'Xpress-VC (TP-VC)',
+                    playerColor: '#EA4335' // Red
+                });
+
+                
+                createCircularPlayer({
+                    containerId : "p7-1",
+                    audioSrc    : `samples/vec2wav2_7.wav`,
+                    fileName    : `vec2wav2`,
+                    playerColor : "#9b59ff"
+                });
+
+                createCircularPlayer({
+                    containerId : "p7-2",
+                    audioSrc    : `samples/knn_vc_7.wav`,
+                    fileName    : `knn-vc`,
+                    playerColor : "#9b59ff"
+                });
+
+                createCircularPlayer({
+                    containerId : "p7-3",
+                    audioSrc    : `samples/diff_heir_vc_7.wav`,
+                    fileName    : `diff-heir-vc`,
+                    playerColor : "#9b59ff"
+                });
+
+                createCircularPlayer({
+                    containerId: 'source-8',
+                    audioSrc: 'samples/source_8.wav',
+                    fileName: 'source_8.wav',
+                    playerColor: '#4285F4', // Blue
+                    transcription: "Her laughter stung as a whip might sting and mad with his wounded pride he turned and sprang with a panther spring and struck at his rival's side and only the woman shuddering could tell how the dead man died"
+                });
+                
+                createCircularPlayer({
+                    containerId: 'reference-8',
+                    audioSrc: 'samples/reference_8.wav',
+                    fileName: 'reference_8.wav',
+                    playerColor: '#34A853' // Green
+                });
+                
+                createCircularPlayer({
+                    containerId: 'generated-8',
+                    audioSrc: 'samples/generated_8.wav',
+                    fileName: 'Xpress-VC (TP-VC)',
+                    playerColor: '#EA4335' // Red
+                });
+                createCircularPlayer({
+                    containerId : "p8-1",
+                    audioSrc    : `samples/vec2wav2_8.wav`,
+                    fileName    : `vec2wav2`,
+                    playerColor : "#9b59ff"
+                });
+
+                createCircularPlayer({
+                    containerId : "p8-2",
+                    audioSrc    : `samples/knn_vc_8.wav`,
+                    fileName    : `knn-vc`,
+                    playerColor : "#9b59ff"
+                });
+
+                createCircularPlayer({
+                    containerId : "p8-3",
+                    audioSrc    : `samples/diff_heir_vc_8.wav`,
+                    fileName    : `diff-heir-vc`,
+                    playerColor : "#9b59ff"
                 });
 
             });
         </script>
     </div>
-    
-    <!-- New container below the first with a gap -->
-    <div class="container" id="section2" style="margin-top: 80px;">
+
+    <!-- ========== SECTION 2 – Ablation study ================================= -->
+    <div class="container" id="section2" style="margin-top:80px;">
         <header class="header">
             <h1 class="gold-title" data-text="Ablation study">Ablation study</h1>
-            <p class="subtitle">Experimental results: Prosody manipulation in synthesized speech</p>
+            <p class="subtitle">When Vanellia‑VC Fails: Effects of Prosody Manipulation</p>
         </header>
-        
-        <div class="image-section">
-            <div class="image-container">
-                <img src="images/image1.png" alt="Sample Image">
+    
+        <!-- ─── Set #1 ──────────────────────────────────────────────────────── -->
+        <div class="ab-set">
+    
+            <!-- top row -->
+            <div class="ab-top-row">
+                <div id="src-11" class="ab-player"></div>
+                <div id="ref-11" class="ab-player"></div>
             </div>
+    
+            <!-- gen row -->
+            <div id="genA-11" class="ab-gen first"></div>
+            <figure class="ab-img"><img src="images/f0_case1_1.png" alt="Gen A spec"></figure>
+    
+            <div id="genB-11" class="ab-gen"></div>
+            <figure class="ab-img"><img src="images/f0_case1_2.png" alt="Gen B spec"></figure>
+    
         </div>
-        
-        <div class="sample-row">
-            <div id="source-11" class="player-container"></div>
-            <div id="reference-11" class="player-container"></div>
-            <div id="generated-11" class="player-container"></div>
+    
+        <!-- ─── Set #2 (duplicate & change IDs / sources) ───────────────────── -->
+        <div class="ab-set">
+    
+            <div class="ab-top-row">
+                <div id="src-12" class="ab-player"></div>
+                <div id="ref-12" class="ab-player"></div>
+            </div>
+    
+            <div id="genA-12" class="ab-gen first"></div>
+            <figure class="ab-img"><img src="images/f0_case2_1.png" alt="Gen A spec"></figure>
+    
+            <div id="genB-12" class="ab-gen"></div>
+            <figure class="ab-img"><img src="images/f0_case2_2.png" alt="Gen B spec"></figure>
+    
         </div>
 
-        <div class="image-section">
-            <div class="image-container">
-                <img src="images/image1.png" alt="Sample Image">
+        <div class="ab-set">
+    
+            <div class="ab-top-row">
+                <div id="src-13" class="ab-player"></div>
+                <div id="ref-13" class="ab-player"></div>
             </div>
+    
+            <div id="genA-13" class="ab-gen first"></div>
+            <figure class="ab-img"><img src="images/f0_case3_1.png" alt="Gen A spec"></figure>
+    
+            <div id="genB-13" class="ab-gen"></div>
+            <figure class="ab-img"><img src="images/f0_case3_2.png" alt="Gen B spec"></figure>
+    
         </div>
+
+  
+  </div> <!-- /container -->
+  
         
-        <div class="sample-row">
-            <div id="source-12" class="player-container"></div>
-            <div id="reference-12" class="player-container"></div>
-            <div id="generated-12" class="player-container"></div>
-        </div>
-        
-        <script src="js/player.js"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Sample 4
-                createCircularPlayer({
-                    containerId: 'source-11',
-                    audioSrc: 'samples/source_11.wav',
-                    fileName: 'source_11.wav',
-                    playerColor: '#4285F4' // Blue
-                });
-                
-                createCircularPlayer({
-                    containerId: 'reference-11',
-                    audioSrc: 'samples/reference_11.wav',
-                    fileName: 'reference_11.wav',
-                    playerColor: '#EA4335' // Red
-                });
-                
-                createCircularPlayer({
-                    containerId: 'generated-11',
-                    audioSrc: 'samples/generated_11.wav',
-                    fileName: 'generated_11.wav',
-                    playerColor: '#34A853' // Green
-                });
-                
-                createCircularPlayer({
-                    containerId: 'source-12',
-                    audioSrc: 'samples/source_12.wav',
-                    fileName: 'source_12.wav',
-                    playerColor: '#4285F4' // Blue
-                });
-                
-                createCircularPlayer({
-                    containerId: 'reference-12',
-                    audioSrc: 'samples/reference_12.wav',
-                    fileName: 'reference_12.wav',
-                    playerColor: '#EA4335' // Red
-                });
-                
-                createCircularPlayer({
-                    containerId: 'generated-12',
-                    audioSrc: 'samples/generated_12.wav',
-                    fileName: 'generated_12.wav',
-                    playerColor: '#34A853' // Green
-                });
-            });
-        </script>
-    </div>
+  <script>
+    document.addEventListener('DOMContentLoaded',()=>{
+    
+      /* --- Set #1 --- */
+      createCircularPlayer({containerId:'src-11',  audioSrc:'samples/source_11.wav',
+      transcription: "Sheriff Jones had his pockets always full of writs issued in the spirit of persecution, but was often baffled by the sharp wits and ready resources of the free state people and sometimes defied outright.",
+      fileName:'source_11.wav',   playerColor:'#4285F4'});
+      createCircularPlayer({containerId:'ref-11',  audioSrc:'samples/reference_11.wav',fileName:'reference_11.wav',playerColor:'#34A853'});
+      createCircularPlayer({containerId:'genA-11', audioSrc:'samples/generated_11.wav',fileName:'generated_11.wav',playerColor:'#EA4335', label: 'Timbre + Prosody Control'});
+      createCircularPlayer({containerId:'genB-11', audioSrc:'samples/generated_11b.wav',fileName:'generated_11b.wav',playerColor:'#EA4335', label: 'Pure Timbre Control'});
+    
+      /* --- Set #2 --- */
+      createCircularPlayer({containerId:'src-12',  audioSrc:'samples/source_12.wav',
+      transcription: "We've already talked about the gross things that people have found in their food, however if you thought that was the end of it, then you have another thing coming!",
+      fileName:'source_12.wav',   playerColor:'#4285F4'});
+      createCircularPlayer({containerId:'ref-12',  audioSrc:'samples/reference_12.wav',fileName:'reference_12.wav',playerColor:'#34A853'});
+      createCircularPlayer({containerId:'genA-12', audioSrc:'samples/generated_12.wav',fileName:'generated_12.wav',playerColor:'#EA4335', label: 'Timbre + Prosody Control'});
+      createCircularPlayer({containerId:'genB-12', audioSrc:'samples/generated_12b.wav',fileName:'generated_12b.wav',playerColor:'#EA4335', label: 'Pure Timbre Control'});
+    
+      /* --- Set #2 --- */
+      createCircularPlayer({containerId:'src-13',  audioSrc:'samples/source_13.wav',
+      transcription: "In every case in which many specimens were obtained the differences were constant the surgeon of a whaling ship in the pacific assured me that when the pediculi with which some sandwich islanders on board swarmed strayed on to the bodies of the English sailors they died in the course of three or four days.",
+      fileName:'source_13.wav',   playerColor:'#4285F4'});
+      createCircularPlayer({containerId:'ref-13',  audioSrc:'samples/reference_13.wav',fileName:'reference_13.wav',playerColor:'#34A853'});
+      createCircularPlayer({containerId:'genA-13', audioSrc:'samples/generated_13.wav',fileName:'generated_13.wav',playerColor:'#EA4335', label: 'Timbre + Prosody Control'});
+      createCircularPlayer({containerId:'genB-13', audioSrc:'samples/generated_13b.wav',fileName:'generated_13b.wav',playerColor:'#EA4335', label: 'Pure Timbre Control'});
+    
+
+      /* repeat for more sets */
+    });
+    </script>
+    
+      
     
     <!-- scripts moved to the bottom so preloader runs first -->
     <script src="js/player.js"></script>

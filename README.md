@@ -1,6 +1,10 @@
 # Voice Conversion Demo
 
-[![demo](https://img.shields.io/badge/demo-page-green)](https://skhskh82.github.io/testdemo/)
+[![paper](https://img.shields.io/badge/paper-arxiv:2409.01995-red?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2409.01995)
+[![demo](https://img.shields.io/badge/demo-page-green)](https://cantabile-kwok.github.io/vec2wav2/)
+![docker](https://img.shields.io/badge/Docker-blue?logo=docker&logoColor=white)
+![python](https://img.shields.io/badge/Python_3.10-orange?logo=python&logoColor=white)
+[![huggingface](https://img.shields.io/badge/Interactive_Demo-HuggingFace-yellow)](https://huggingface.co/spaces/cantabile-kwok/vec2wav2.0-demo)
 
 > [!IMPORTANT] 
 > This is a university project, which was done using kaggle free resources, so keep your expectations accordingly!
