@@ -1,4 +1,4 @@
-# Voice Conversion Demo
+# Xpress‑VC: Expressive Voice Conversion With Joint Timbre and Prosody Transfer
 
 [![demo](https://img.shields.io/badge/demo-page-green)](https://github.com/skhskh82/testdemo/)
 
